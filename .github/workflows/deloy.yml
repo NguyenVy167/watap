@@ -3,27 +3,27 @@ name: Deploy to Replit
 on:
   push:
     branches:
-      - main  # Hoặc tên nhánh mà bạn muốn deploy từ đó
+      - main  # Hoặc nhánh khác mà bạn muốn deploy
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Python (hoặc Node.js, nếu ứng dụng của bạn dùng Node.js)
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'  # Thay đổi nếu bạn sử dụng Python khác
+    - name: Set up Python (nếu dùng Python, hoặc Node.js, tùy vào công nghệ bạn sử dụng)
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Chỉnh sửa nếu bạn dùng phiên bản Python khác
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt  # Nếu dùng Python, hoặc cài đặt thư viện khác tùy theo công nghệ
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt  # Nếu bạn sử dụng Python, hoặc cài đặt theo công nghệ khác
 
-      - name: Deploy to Replit
-        run: |
-          curl -fsSL https://replit.com/public/cli.sh | bash  # Thử lại nếu Replit CLI cần thiết
-          repl deploy --token ${{ secrets.REPLIT_TOKEN }} --workspace <workspace_name>
-
+    - name: Deploy to Replit using GitHub API
+      env:
+        REPLIT_TOKEN: ${{ secrets.REPLIT_TOKEN }}  # Đảm bảo rằng bạn đã thêm REPLIT_TOKEN vào GitHub Secrets
+      run: |
+        curl -X POST https://replit.com/api/v0/your_endpoint_to_deploy -H "Authorization: Bearer $REPLIT_TOKEN" -d '{"source": "repo_url", "target": "replit_workspace"}'
