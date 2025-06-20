@@ -1,42 +1,29 @@
-name: Deploy Python App to Replit
+name: Deploy to Replit
 
 on:
   push:
     branches:
-      - main  # Chạy workflow khi có thay đổi trên nhánh 'main'
+      - main  # Hoặc tên nhánh mà bạn muốn deploy từ đó
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Cài đặt Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      # Cài đặt Replit CLI
-      - name: Install Replit CLI
-        run: |
-          npm install -g replit
-
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
+      - name: Set up Python (hoặc Node.js, nếu ứng dụng của bạn dùng Node.js)
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.8'  # Thay đổi nếu bạn sử dụng Python khác
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-
-      - name: Install Replit CLI
-        run: |
-          curl -fsSL https://replit.com/public/cli.sh | bash
+          pip install -r requirements.txt  # Nếu dùng Python, hoặc cài đặt thư viện khác tùy theo công nghệ
 
       - name: Deploy to Replit
         run: |
-          repl deploy --token ${{ secrets.REPLIT_TOKEN }} --workspace ${{ secrets.REPLIT_WORKSPACE }}
+          curl -fsSL https://replit.com/public/cli.sh | bash  # Thử lại nếu Replit CLI cần thiết
+          repl deploy --token ${{ secrets.REPLIT_TOKEN }} --workspace <workspace_name>
+
