@@ -10,6 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Cài đặt Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Cài đặt Replit CLI
+      - name: Install Replit CLI
+        run: |
+          npm install -g replit
+
       - name: Checkout code
         uses: actions/checkout@v2
 
